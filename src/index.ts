@@ -185,7 +185,8 @@ fastify.setErrorHandler((error, request, reply) => {
 });
 
 fastify.setNotFoundHandler((request, reply) => {
-	throw new ApiError(404, "Not found");
+	if (request.url === "/") reply.redirect("/home");
+	else throw new ApiError(404, "Not found");
 });
 
 // @ts-ignore
