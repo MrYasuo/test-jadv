@@ -194,13 +194,10 @@ fastify.setNotFoundHandler((request, reply) => {
 });
 
 // @ts-ignore
-fastify.listen(
-	{ port: process.env.PORT || 8080, host: "0.0.0.0" },
-	(err, address) => {
-		if (err) {
-			console.error(err);
-			process.exit(1);
-		}
-		console.log(`Server listening at ${address}`);
+fastify.listen({ port: process.env.PORT || 8080 }, (err, address) => {
+	if (err) {
+		console.error(err);
+		process.exit(1);
 	}
-);
+	console.log(`Server listening at ${address}`);
+});

@@ -318,7 +318,7 @@
 			else window.FlashMessage.error(data.message);
 		}
 
-		const logout = () => {
+		const logout = async () => {
 			const res = await fetch("/logout", {
 				method: "POST",
 				credentials: "include",
