@@ -176,6 +176,10 @@ fastify
 				return reply.send({ message: res });
 			}
 		);
+
+		fastify.post("/logout", (request, reply) => {
+			return reply.clearCookie("token").redirect("/login");
+		});
 	});
 
 fastify.setErrorHandler((error, request, reply) => {

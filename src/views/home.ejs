@@ -87,6 +87,12 @@
 			width: 1%;
 		}
 
+		#logout {
+			border: 2px solid red;
+			color: red;
+			margin: 0;
+		}
+
 		#refresh {
 			display: none;
 			border: 2px solid red;
@@ -94,7 +100,8 @@
 			margin: 0;
 		}
 
-		#refresh:hover {
+		#refresh:hover,
+		#logout:hover {
 			box-shadow: 0 0 40px 40px red inset;
 			color: white;
 		}
@@ -202,6 +209,7 @@
 <body>
 	<div id="container">
 		<div id="button-container">
+			<button id="logout" onclick="logout()">Logout</button>
 			<button id="major" onclick="registerCourse('major')">Register major courses</button>
 			<button id="all" onclick="registerCourse('all')">Register all courses</button>
 			<button id="codes" onclick="registerCourse('codes')">Register courses by codes</button>
@@ -308,6 +316,15 @@
 			const data = await res.json();
 			if (res.status === 200) window.FlashMessage.success(data.message);
 			else window.FlashMessage.error(data.message);
+		}
+
+		const logout = () => {
+			const res = await fetch("/logout", {
+				method: "POST",
+				credentials: "include",
+			});
+			window.location.href = res.url;
+			window.FlashMessage.success("Logout successfully");
 		}
 
 		registerCourseByCodeBtn.addEventListener("click", async (e) => {
