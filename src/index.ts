@@ -188,7 +188,8 @@ fastify.setNotFoundHandler((request, reply) => {
 	throw new ApiError(404, "Not found");
 });
 
-fastify.listen({ port: 8080 }, (err, address) => {
+// @ts-ignore
+fastify.listen({ port: process.env.PORT || 8080 }, (err, address) => {
 	if (err) {
 		console.error(err);
 		process.exit(1);
