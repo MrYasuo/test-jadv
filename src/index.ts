@@ -190,7 +190,7 @@ fastify.setNotFoundHandler((request, reply) => {
 
 // @ts-ignore
 fastify.listen(
-	{ path: `0.0.0.0:${process.env.PORT || 8080}` },
+	{ port: process.env.PORT || 8080, host: "0.0.0.0" },
 	(err, address) => {
 		if (err) {
 			console.error(err);
