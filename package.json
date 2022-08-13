@@ -1,0 +1,95 @@
+{
+	"name": "test",
+	"version": "1.0.0",
+	"main": "src/index.ts",
+	"license": "MIT",
+	"type": "module",
+	"imports": {
+		"#models": [
+			"./src/models/index.ts"
+		],
+		"#models/*": [
+			"./src/models/*.ts"
+		],
+		"#middlewares": [
+			"./src/middlewares/index.ts"
+		],
+		"#middlewares/*": [
+			"./src/middlewares/*.ts"
+		],
+		"#configs": [
+			"./src/configs/index.ts"
+		],
+		"#configs/*": [
+			"./src/configs/*.ts"
+		],
+		"#routes": [
+			"./src/routes/index.ts"
+		],
+		"#routes/*": [
+			"./src/routes/*.ts"
+		],
+		"#controllers": [
+			"./src/controllers/index.ts"
+		],
+		"#controllers/*": [
+			"./src/controllers/*.ts"
+		],
+		"#utils": [
+			"./src/utils/index.ts"
+		],
+		"#utils/*": [
+			"./src/utils/*.ts"
+		],
+		"#services": [
+			"./src/services/index.ts"
+		],
+		"#services/*": [
+			"./src/services/*.ts"
+		],
+		"#constants": [
+			"./src/constants/index.ts"
+		],
+		"#constants/*": [
+			"./src/constants/*.ts"
+		]
+	},
+	"scripts": {
+		"build": "tsc -p tsconfig.json",
+		"clean": "tsc --help",
+		"start": "TS_NODE_FILES=true TS_NODE_TRANSPILE_ONLY=true ts-node-esm src/index.ts",
+		"dev": "nodemon --watch src --ext ts,ejs -L --verbose -x 'TS_NODE_FILES=true TS_NODE_TRANSPILE_ONLY=true ts-node-esm src/index.ts'"
+	},
+	"dependencies": {
+		"@fastify/cookie": "^7.3.1",
+		"@fastify/cors": "^8.1.0",
+		"@fastify/env": "^4.1.0",
+		"@fastify/formbody": "^7.0.1",
+		"@fastify/jwt": "^6.3.2",
+		"@fastify/static": "^6.5.0",
+		"@fastify/view": "^7.1.0",
+		"@types/luxon": "^3.0.0",
+		"ejs": "^3.1.8",
+		"fastify": "^4.4.0",
+		"jsdom": "^20.0.0",
+		"luxon": "^3.0.1",
+		"node-fetch-cookies": "^2.0.4",
+		"paseto": "^3.1.0",
+		"pino": "^8.4.0",
+		"pino-pretty": "^8.1.0",
+		"pino-std-serializers": "^6.0.0"
+	},
+	"devDependencies": {
+		"@swc/core": "^1.2.224",
+		"@types/ejs": "^3.1.1",
+		"@types/jsdom": "^20.0.0",
+		"@types/node": "^18.6.4",
+		"module-alias": "^2.2.2",
+		"ngrok": "^4.3.1",
+		"nodemon": "^2.0.19",
+		"sucrase": "^3.25.0",
+		"ts-node": "^10.9.1",
+		"tsconfig-paths": "^4.1.0",
+		"typescript": "^4.7.4"
+	}
+}

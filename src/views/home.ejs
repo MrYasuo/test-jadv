@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+	<link rel="stylesheet" href="/css/flash.min.css">
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			position: relative;
+		}
+
+		body {
+			height: 100vh;
+			background: white;
+		}
+
+		#container {
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+		}
+
+		#button-container {
+			display: flex;
+			justify-content: center;
+			height: 10%;
+		}
+
+		button {
+			box-sizing: border-box;
+			appearance: none;
+			background-color: transparent;
+			border: 2px solid #49bf67;
+			border-radius: 0.6em;
+			color: #49bf67;
+			cursor: pointer;
+			display: flex;
+			align-self: center;
+			font-size: 1rem;
+			font-weight: 400;
+			line-height: 1;
+			margin: 10px;
+			padding: 0.5em 1.5em;
+			text-decoration: none;
+			text-align: center;
+			text-transform: uppercase;
+			font-family: "Montserrat", sans-serif;
+			font-weight: 700;
+		}
+
+		button:hover {
+			color: #fff;
+			outline: 0;
+		}
+
+		button {
+			transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+		}
+
+		button:hover {
+			box-shadow: 0 0 40px 40px #49bf67 inset;
+		}
+
+		#content {
+			margin: 0 20px;
+			height: 90%;
+			overflow-y: auto;
+		}
+
+		tr,
+		td {
+			border: 1px solid black;
+			padding: 5px;
+		}
+
+		tr td:nth-child(5) {
+			white-space: nowrap;
+			width: 1%;
+		}
+
+		#refresh {
+			display: none;
+			border: 2px solid red;
+			color: red;
+			margin: 0;
+		}
+
+		#refresh:hover {
+			box-shadow: 0 0 40px 40px red inset;
+			color: white;
+		}
+
+		.active-btn {
+			display: block !important;
+		}
+
+		#form {
+			display: none;
+		}
+
+		.active-form {
+			display: flex !important;
+		}
+
+		.textarea {
+			width: 100%;
+			min-height: 200px;
+			overflow: hidden;
+			padding: 20px;
+			font-size: 14px;
+			margin: 20px;
+			display: block;
+			border-radius: 10px;
+			outline: 6px solid #49bf67;
+		}
+
+		.textarea[contenteditable]:empty::before {
+			content: "Type course codes here";
+			color: gray;
+		}
+
+		.spinner-container {
+			margin-left: 10px;
+		}
+
+		.spinner {
+			margin-left: 10px;
+			border: 2px solid #dbf2ff;
+			width: 32px;
+			height: 32px;
+			display: none;
+			border-radius: 50%;
+			border-right: 2px solid #018df7;
+			animation-name: spin;
+			animation-duration: 900ms;
+			animation-iteration-count: infinite;
+			/*animation-timing-function: linear; /*linear spin */
+			animation-timing-function: cubic-bezier(0.53, 0.21, 0.29, 0.67);
+		}
+
+		@-webkit-keyframes spin {
+			0% {
+				-webkit-transform: rotate(0deg);
+			}
+
+			/*50% {width:24px;height:24px} /*shrinking effect*/
+			100% {
+				-webkit-transform: rotate(360deg);
+			}
+		}
+
+		@keyframes spin {
+			0% {
+				-webkit-transform: rotate(0deg);
+			}
+
+			/*50% {width:24px;height:24px} /*shrinking effect*/
+			100% {
+				-webkit-transform: rotate(360deg);
+			}
+		}
+
+		#refresh-container {
+			display: flex;
+			margin: 10px;
+			align-items: center;
+		}
+
+		.spinner-active {
+			display: block;
+		}
+
+		#manual-register-course-container {
+			display: flex;
+			flex-direction: column;
+			height: 90%;
+		}
+
+		.btn-manual {
+			display: none;
+		}
+
+		.disable {
+			display: none !important;
+		}
+
+		.hover-tr {
+			background-color: yellow;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="container">
+		<div id="button-container">
+			<button id="major" onclick="registerCourse('major')">Register major courses</button>
+			<button id="all" onclick="registerCourse('all')">Register all courses</button>
+			<button id="codes" onclick="registerCourse('codes')">Register courses by codes</button>
+			<div id="refresh-container">
+				<button id="refresh" onclick="refreshCourse()">Refresh</button>
+				<div class="spinner-container">
+					<div class="spinner"></div>
+				</div>
+			</div>
+		</div>
+		<div id="manual-register-course-container">
+			<div id="content"></div>
+			<button id="manual-register-course" class="btn-manual">Register now</button>
+		</div>
+		<div id="form">
+			<span class="textarea" role="textbox" contenteditable></span>
+			<button type="submit" class="btn-codes">Register</button>
+		</div>
+	</div>
+	<script>
+		const $ = document.querySelector.bind(document);
+		const $$ = document.querySelectorAll.bind(document);
+
+		const types = ['major', 'all'];
+		const contentContainer = $("#content");
+		const refreshButton = $("#refresh");
+		const form = $("#form");
+		const textarea = $(".textarea");
+		const registerCourseByCodeBtn = $("button.btn-codes");
+		const registerCourseManualBtn = $("button.btn-manual");
+		const manualRegisterCourseContainer = $("#manual-register-course-container");
+		const spinner = $(".spinner");
+
+		const registerCourse = async (type) => {
+			registerCourseManualBtn.classList.add("active-btn");
+			if (types.includes(type)) {
+				manualRegisterCourseContainer.classList.remove("disable");
+				if (localStorage.getItem(`${type}`)) contentContainer.innerHTML = localStorage.getItem(`${type}`);
+				else {
+					spinner.classList.toggle("spinner-active");
+					contentContainer.classList.remove(...types.filter(t => t !== type));
+					contentContainer.classList.add(`${type}`);
+					let res = await fetch(`/data/${type}.html`);
+					spinner.classList.toggle("spinner-active");
+					if (res.status === 200) {
+						const html = await res.text();
+						contentContainer.innerHTML = html;
+						localStorage.setItem(`${type}`, html);
+					} else await refreshCourse();
+				}
+				refreshButton.classList.add("active-btn");
+				[...$$("tr[title=''] > td:first-child > input")].forEach(input => {
+					input.parentElement.style.cursor = "pointer";
+					input.parentElement.onclick = (e) => e.currentTarget.firstElementChild.checked = true;
+					input.parentElement.onmouseover = (e) => e.currentTarget.parentElement.classList.add("hover-tr");
+					input.parentElement.onmouseout = (e) => e.currentTarget.parentElement.classList.remove("hover-tr");
+					input.onmouseover = (e) => e.currentTarget.parentElement.parentElement.classList.add("hover-tr");
+					input.onmouseout = (e) => e.currentTarget.parentElement.parentElement.classList.remove("hover-tr");
+				});
+			} else {
+				refreshButton.classList.remove("active-btn");
+				manualRegisterCourseContainer.classList.add("disable");
+				registerCourseManualBtn.classList.remove("active-btn");
+				contentContainer.innerHTML = "";
+				contentContainer.classList.remove(...types);
+				form.classList.add("active-form");
+			}
+		}
+
+		const refreshCourse = async () => {
+			const type = contentContainer.classList[0];
+			spinner.classList.toggle("spinner-active");
+			res = await fetch("/course", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					type
+				}),
+				credentials: "include",
+			})
+			spinner.classList.toggle("spinner-active");
+			const data = await res.json();
+			if (res.status === 200) {
+				contentContainer.innerHTML = data.html;
+				localStorage.setItem(`${type}`, data.html);
+			}
+			else
+				window.FlashMessage.error(data.message);
+		}
+
+		const registerCourseByCode = async (codes) => {
+			const res = await fetch("/register-course", {
+				method: "POST",
+				credentials: "include",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					codes,
+				})
+			});
+			const data = await res.json();
+			if (res.status === 200) window.FlashMessage.success(data.message);
+			else window.FlashMessage.error(data.message);
+		}
+
+		registerCourseByCodeBtn.addEventListener("click", async (e) => {
+			await registerCourseByCode(textarea.innerText.split("\n"))
+		})
+
+		registerCourseManualBtn.addEventListener("click", async (e) => {
+			const codes = [...$$("input[type=checkbox]:checked")].map(e => e.parentElement.parentElement.children[4].innerText);
+			await registerCourseByCode(codes);
+		})
+
+	</script>
+	<script src="https://kit.fontawesome.com/3aa4afe33c.js" crossorigin="anonymous"></script>
+	<script src="/scripts/flash.min.js"></script>
+</body>
+
+</html>

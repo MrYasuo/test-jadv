@@ -1,0 +1,40 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "baseUrl": "src",
+        "paths": {
+            "#models": ["models/index.ts"],
+            "#models/*": ["models/*.ts"],
+            "#middlewares": ["middlewares/index.ts"],
+            "#middlewares/*": ["middlewares/*.ts"],
+            "#configs": ["configs/index.ts"],
+            "#configs/*": ["configs/*.ts"],
+            "#routes": ["routes/index.ts"],
+            "#routes/*": ["routes/*.ts"],
+            "#controllers": ["controllers/index.ts"],
+            "#controllers/*": ["controllers/*.ts"],
+            "#utils": ["utils/index.ts"],
+            "#utils/*": ["utils/*.ts"],
+            "#services": ["services/index.ts"],
+            "#services/*": ["services/*.ts"],
+            "#constants": ["constants/index.ts"],
+            "#constants/*": ["constants/*.ts"]
+        },
+        "resolveJsonModule": true,
+        "outDir": "src/out",
+        "esModuleInterop": true,
+        "preserveSymlinks": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "skipLibCheck": true
+    },
+    "include": ["src/**/*"],
+    "ts-node-esm": {
+        "swc": true
+    },
+    "ts-node": {
+        "swc": true
+    }
+}
