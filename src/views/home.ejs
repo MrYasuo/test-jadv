@@ -246,6 +246,7 @@
 		const registerCourse = async (type) => {
 			registerCourseManualBtn.classList.add("active-btn");
 			if (types.includes(type)) {
+				contentContainer.classList.remove(...types.filter(t => t !== type));
 				contentContainer.classList.add(type);
 				manualRegisterCourseContainer.classList.remove("disable");
 				if (localStorage.getItem(`${type}`)) contentContainer.innerHTML = localStorage.getItem(`${type}`);
