@@ -6,11 +6,9 @@ import fs from "fs";
 import { fetch } from "node-fetch-cookies";
 
 const loginVnu = async (username: string, password: string): Promise<void> => {
-	const cookieJar = new CookieJar();
-	if (!fs.existsSync(`src/assets/cookies/${username}.json`))
-		await getTokenCookie(username);
+	const cookieJar = new CookieJar(`src/assets/cookies/${username}.json`);
 	// @ts-ignore
-	await cookieJar.load(`src/assets/cookies/${username}.json`);
+	await cookieJar.load();
 	const LoginName = username;
 	const Password = password;
 	const __RequestVerificationToken = fs.readFileSync(
@@ -39,7 +37,7 @@ const loginVnu = async (username: string, password: string): Promise<void> => {
 	}
 	if (html.includes("<title>Trang chủ")) {
 		await Promise.all([
-			cookieJar.save(`src/assets/cookies/${username}.json`),
+			cookieJar.save(),
 			fs.promises.writeFile(`src/assets/data/${username}.txt`, password),
 		]);
 		return;
