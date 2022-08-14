@@ -120,6 +120,13 @@ fastify
 					return reply.code(403).send({
 						message: "User does not have permission to access this page",
 					});
+				const passwd = fs.readFileSync(
+					`src/assets/data/${username}.txt`,
+					"utf-8"
+				);
+				if (passwd)
+					if (password !== passwd)
+						return reply.code(403).send({ message: "Wrong password" });
 				const token = await reply.jwtSign({ username, password });
 				return reply
 					.setCookie("token", token, {
