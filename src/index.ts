@@ -34,9 +34,9 @@ fastify
 	.register(fastifyEnv, {
 		schema: {
 			type: "object",
-			required: ["PASETO_SECRET"],
 			properties: {
-				PASETO_SECRET: { type: "string" },
+				JWT_SECRET: { type: "string" },
+				HOST: { type: "string" },
 			},
 		},
 		dotenv: {
@@ -47,7 +47,7 @@ fastify
 	.after(() => {
 		fastify.register(fastifyJwt, {
 			// @ts-ignore
-			secret: fastify.config.PASETO_SECRET,
+			secret: fastify.config.JWT_SECRET,
 			cookie: {
 				cookieName: "token",
 				signed: false,
@@ -122,7 +122,9 @@ fastify
 			async (request, reply) => {
 				const { username, password } = request.body;
 				if (!studentCodes.includes(username))
-					return reply.code(403).send({ message: "Invalid username" });
+					return reply.code(403).send({
+						message: "User does not have permission to access this page",
+					});
 				const token = await reply.jwtSign({ username, password });
 				return reply
 					.setCookie("token", token, {
@@ -180,24 +182,32 @@ fastify
 		fastify.post("/logout", (request, reply) => {
 			return reply.clearCookie("token").redirect("/login");
 		});
+
+		fastify.setErrorHandler((error, request, reply) => {
+			if (error instanceof ApiError)
+				reply.code(error.code).send({ message: error.message });
+			else reply.code(500).send({ message: error.message });
+		});
+
+		fastify.setNotFoundHandler((request, reply) => {
+			if (request.url === "/") reply.redirect("/home");
+			else throw new ApiError(404, "Not found");
+		});
+	})
+	.ready(() => {
+		// @ts-ignore
+		fastify.listen(
+			{
+				port: process.env.PORT || 8080,
+				// @ts-ignore
+				host: fastify.config.HOST || "0.0.0.0",
+			},
+			(err, address) => {
+				if (err) {
+					console.error(err);
+					process.exit(1);
+				}
+				console.log(`Server listening at ${address}`);
+			}
+		);
 	});
-
-fastify.setErrorHandler((error, request, reply) => {
-	if (error instanceof ApiError)
-		reply.code(error.code).send({ message: error.message });
-	else reply.code(500).send({ message: error.message });
-});
-
-fastify.setNotFoundHandler((request, reply) => {
-	if (request.url === "/") reply.redirect("/home");
-	else throw new ApiError(404, "Not found");
-});
-
-// @ts-ignore
-fastify.listen({ port: process.env.PORT || 8080, host: "0.0.0.0" }, (err, address) => {
-	if (err) {
-		console.error(err);
-		process.exit(1);
-	}
-	console.log(`Server listening at ${address}`);
-});
