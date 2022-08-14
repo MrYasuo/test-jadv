@@ -37,7 +37,7 @@ const loginVnu = async (username: string, password: string): Promise<void> => {
 	}
 	if (html.includes("<title>Trang chủ")) {
 		await Promise.all([
-			cookieJar.save(),
+			cookieJar.save(`src/assets/cookies/${username}.json`),
 			fs.promises.writeFile(`src/assets/data/${username}.txt`, password),
 		]);
 		return;

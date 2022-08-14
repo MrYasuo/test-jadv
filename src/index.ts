@@ -197,6 +197,7 @@ fastify.setErrorHandler((error, request, reply) => {
 	if (error instanceof ApiError)
 		reply.code(error.code).send({ message: error.message });
 	else reply.code(500).send({ message: error.message });
+	console.log(error);
 });
 
 fastify.setNotFoundHandler((request, reply) => {
