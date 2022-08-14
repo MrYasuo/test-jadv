@@ -246,6 +246,7 @@
 		const registerCourse = async (type) => {
 			registerCourseManualBtn.classList.add("active-btn");
 			if (types.includes(type)) {
+				contentContainer.classList.add(type);
 				manualRegisterCourseContainer.classList.remove("disable");
 				if (localStorage.getItem(`${type}`)) contentContainer.innerHTML = localStorage.getItem(`${type}`);
 				else {
@@ -270,6 +271,7 @@
 					input.onmouseout = (e) => e.currentTarget.parentElement.parentElement.classList.remove("hover-tr");
 				});
 			} else {
+				contentContainer.classList.remove(...types);
 				refreshButton.classList.remove("active-btn");
 				manualRegisterCourseContainer.classList.add("disable");
 				registerCourseManualBtn.classList.remove("active-btn");
