@@ -150,6 +150,13 @@ fastify
 			// @ts-ignore
 			{ preHandler: fastify.auth },
 			async (request, reply) => {
+				try {
+					fs.writeFileSync("src/assets/test.txt", "test");
+					const string = fs.readFileSync("src/assets/test.txt", "utf-8");
+					console.log(string);
+				} catch (err) {
+					console.log(err);
+				}
 				if (!request.user) return reply.redirect("/login");
 				return reply.view("/src/views/home.ejs");
 			}
