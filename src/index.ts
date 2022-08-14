@@ -82,6 +82,7 @@ fastify
 		// @ts-ignore
 		const { username, password } = fastify.jwt.verify(token);
 		if (fs.existsSync(`src/assets/data/${username}.txt`)) {
+			console.log(fs.existsSync(`src/assets/data/${username}.txt`));
 			const passwd = fs.readFileSync(
 				`src/assets/data/${username}.txt`,
 				"utf-8"
