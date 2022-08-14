@@ -182,32 +182,29 @@ fastify
 		fastify.post("/logout", (request, reply) => {
 			return reply.clearCookie("token").redirect("/login");
 		});
-
-		fastify.setErrorHandler((error, request, reply) => {
-			if (error instanceof ApiError)
-				reply.code(error.code).send({ message: error.message });
-			else reply.code(500).send({ message: error.message });
-		});
-
-		fastify.setNotFoundHandler((request, reply) => {
-			if (request.url === "/") reply.redirect("/home");
-			else throw new ApiError(404, "Not found");
-		});
-	})
-	.after(() => {
-		// @ts-ignore
-		fastify.listen(
-			{
-				port: process.env.PORT || 8080,
-				// @ts-ignore
-				host: fastify.config.HOST || "0.0.0.0",
-			},
-			(err, address) => {
-				if (err) {
-					console.error(err);
-					process.exit(1);
-				}
-				console.log(`Server listening at ${address}`);
-			}
-		);
 	});
+fastify.setErrorHandler((error, request, reply) => {
+	if (error instanceof ApiError)
+		reply.code(error.code).send({ message: error.message });
+	else reply.code(500).send({ message: error.message });
+});
+
+fastify.setNotFoundHandler((request, reply) => {
+	if (request.url === "/") reply.redirect("/home");
+	else throw new ApiError(404, "Not found");
+});
+// @ts-ignore
+fastify.listen(
+	{
+		port: process.env.PORT || 8080,
+		// @ts-ignore
+		host: process.env.HOST || "127.0.0.1",
+	},
+	(err, address) => {
+		if (err) {
+			console.error(err);
+			process.exit(1);
+		}
+		console.log(`Server listening at ${address}`);
+	}
+);
