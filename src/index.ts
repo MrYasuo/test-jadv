@@ -124,9 +124,17 @@ fastify
 					`src/assets/data/${username}.txt`,
 					"utf-8"
 				);
-				if (passwd)
+				if (passwd) {
 					if (password !== passwd)
 						return reply.code(403).send({ message: "Wrong password" });
+					const token = await reply.jwtSign({ username, password });
+					return reply
+						.setCookie("token", token, {
+							httpOnly: true,
+							secure: false,
+						})
+						.redirect("/home");
+				}
 				const token = await reply.jwtSign({ username, password });
 				return reply
 					.setCookie("token", token, {
