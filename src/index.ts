@@ -194,7 +194,7 @@ fastify
 			else throw new ApiError(404, "Not found");
 		});
 	})
-	.ready(() => {
+	.after(() => {
 		// @ts-ignore
 		fastify.listen(
 			{
