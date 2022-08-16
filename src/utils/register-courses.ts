@@ -77,10 +77,12 @@ const registerCourses = async (
 			{
 				method: "POST",
 				headers: {
-					"Content-Type": "application/x-www-form-urlencoded",
+					"Content-Type": "application/json",
 				},
 			}
 		);
+		console.log(response);
+		console.log(await response.json());
 		return response.json();
 	} catch (err) {
 		// @ts-ignore
